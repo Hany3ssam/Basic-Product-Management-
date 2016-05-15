@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PearDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Manufacture">
+    <Key>
+      <PropertyRef Name="ManuID" />
+    </Key>
+    <Property Name="ManuID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ManuName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ManufacturerID" Type="int" />
+    <Property Name="ManuDate" Type="date" />
+    <Property Name="RegistrationDate" Type="datetime" />
+    <Property Name="ProductImage" Type="varbinary(max)" />
+    <Property Name="ProductPrice" Type="decimal" Precision="18" Scale="0" />
+  </EntityType>
+  <Association Name="FK_Manufacture_Manufacture">
+    <End Role="Manufacture" Type="Self.Manufacture" Multiplicity="1" />
+    <End Role="Manufacture1" Type="Self.Manufacture" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Manufacture">
+        <PropertyRef Name="ManuID" />
+      </Principal>
+      <Dependent Role="Manufacture1">
+        <PropertyRef Name="ManuID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Products_Manufacture">
+    <End Role="Manufacture" Type="Self.Manufacture" Multiplicity="0..1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Manufacture">
+        <PropertyRef Name="ManuID" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="ManufacturerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PearDBModelStoreContainer">
+    <EntitySet Name="Manufacture" EntityType="Self.Manufacture" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Manufacture_Manufacture" Association="Self.FK_Manufacture_Manufacture">
+      <End Role="Manufacture" EntitySet="Manufacture" />
+      <End Role="Manufacture1" EntitySet="Manufacture" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Products_Manufacture" Association="Self.FK_Products_Manufacture">
+      <End Role="Manufacture" EntitySet="Manufacture" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

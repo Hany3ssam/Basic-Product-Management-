@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PearDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Manufacture">
+    <Key>
+      <PropertyRef Name="ManuID" />
+    </Key>
+    <Property Name="ManuID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ManuName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Manufacture1" Relationship="Self.FK_Manufacture_Manufacture" FromRole="Manufacture" ToRole="Manufacture1" />
+    <NavigationProperty Name="Manufacture2" Relationship="Self.FK_Manufacture_Manufacture" FromRole="Manufacture1" ToRole="Manufacture" />
+    <NavigationProperty Name="Products" Relationship="Self.FK_Products_Manufacture" FromRole="Manufacture" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ManufacturerID" Type="Int32" />
+    <Property Name="ManuDate" Type="DateTime" Precision="0" />
+    <Property Name="RegistrationDate" Type="DateTime" Precision="3" />
+    <Property Name="ProductImage" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="ProductPrice" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="Manufacture" Relationship="Self.FK_Products_Manufacture" FromRole="Products" ToRole="Manufacture" />
+  </EntityType>
+  <Association Name="FK_Manufacture_Manufacture">
+    <End Role="Manufacture" Type="Self.Manufacture" Multiplicity="1" />
+    <End Role="Manufacture1" Type="Self.Manufacture" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Manufacture">
+        <PropertyRef Name="ManuID" />
+      </Principal>
+      <Dependent Role="Manufacture1">
+        <PropertyRef Name="ManuID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Products_Manufacture">
+    <End Role="Manufacture" Type="Self.Manufacture" Multiplicity="0..1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Manufacture">
+        <PropertyRef Name="ManuID" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="ManufacturerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PearDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Manufacture" EntityType="Self.Manufacture" />
+    <EntitySet Name="Products" EntityType="Self.Products" />
+    <AssociationSet Name="FK_Manufacture_Manufacture" Association="Self.FK_Manufacture_Manufacture">
+      <End Role="Manufacture" EntitySet="Manufacture" />
+      <End Role="Manufacture1" EntitySet="Manufacture" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Products_Manufacture" Association="Self.FK_Products_Manufacture">
+      <End Role="Manufacture" EntitySet="Manufacture" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
